@@ -1,0 +1,59 @@
+Build a Worldclass and Modern Web App named ProjectZ, Which will recommend Fashion outfit and Makeup Sugesstions based on user search. Complete Workflow is mentioned below.
+
+1. User visit a Homepage Where he can see feature of this tool like Ai Usase for Personalize Recommendations, Wear Outfit like Celebrities using AI. On this Will See a Option Get Started in the Header. 
+
+2. On Clicking User will be prompted to Signin or Sign up. First Time Visitor will sign up after verification otp using his email id. and return user can simply login using password and no verification is needed.
+
+3. After Login, User Will a option a Option to create Profile. User must create profile before using the ai recommendation. On creating profile, profile will be assigned an 12 Digit unique Alphanumeric ID
+
+4. To Create a profile, User will need to enter, Name of The Profile under Shopping For Text field, Then Enter Age in numerical, and Select gender between Male and Female, Then User will need to Select Country from Various Countries but for now User Can only Select USA, India, UK. More Countries will be added later. After Selecting the Country, User will see Two Radio Buttons, One is for Upload Multi IMages of yours and Let Ai do the Magic, or Enter Data Manually. If User Select Upload Multiple Images. He will se two Option to upload image files, One is Face Close up and Other will be Full Body Image. Once the user upload the Image, Both the File will saved in backend storage as uniqueAlphanumericID-FaceCloseup.png and uniqueAlphanumericID-Fullbody.png. Once the User image is save into the backend, Ai Model will analyse its Skin Color, Undertones from Face Close Up image and Body shape from Full Body Image and after analyzing these, The value will be saved in the profile after creating the profile. the analysis profile might take long that's why till the value is not achieved the user can see analysis under process in the profile detail page. One analysis gets completed the value will be placed in the profile detail page under, Skin Tone for Skin tone, Under Tone for Undertone and Body Shape for Bodyshape. The User can also see the image he uploaded during profile creation and the user can edit their profile anytime but unique id will be same once assigned and cant be changed. This whole step is for the user if he choose to upload image. 
+
+5. If user decide to enter data manually, He will prompt with various options as follows: 
+
+Users can proceed by providing key details without images.
+
+Skin Tone Dropdown Selection: Fair: Light skin tones. Wheatish: Medium skin tone. Brown: Deeper skin tones. Intense Dark: The deepest skin tones.
+
+Undertone Dropdown Selection with Tip: Warm: Yellow, golden, or peachy hues. Cool: Pink, red, or bluish hues. Neutral: A mix of warm and cool.
+
+Tip: Check your veins in the Hand : If its Blue/Purple = Cool, If its Green = Warm, If its Unclear Vein Color = Neutral
+
+Body Shape Selection with Guide :As selected gender above, and only relevant body shape options appear.
+
+For Males:
+
+Rectangle: Equal shoulders, waist, and hips.
+
+Triangle: Shoulders narrower than waist/hips.
+
+Inverted Triangle: Shoulders wider than waist/hips.
+
+Oval: Waist wider than shoulders/hips.
+
+Trapezoid: Shoulders > Waist > Hips (balanced proportion).
+
+For Females:
+
+Hourglass: Bust and hips equal, with a smaller waist.
+
+Pear/Triangle: Hips wider than bust/shoulders.
+
+Apple/Inverted Triangle: Bust/shoulders wider than hips.
+
+Rectangle: Bust, waist, and hips equal.
+
+Spoon: Defined hip curve, wider hips.
+
+Diamond: Waist wider than bust/hips.
+
+Oval: Rounded shape with a larger bust and stomach.
+
+Note: Users can edit their profile later to upload images.
+
+6. After Creating Profile and saving, User will come back to previous page with option to choose profile with Select Profile to shop for. Now After Choosing the profile, User will get a option to search based on template, "I want to buy 'Product Name' for 'Profile Name'" meaning, Using this Format User can insert Product Name at the Product Name Placeholder and Profile Info will their already as its selected earlier.
+
+7. Once Searched, User Can see there Searched Query with search result which have, Product Image, Price, Name, Best Fit for Occasion and Buy Now Button which will redirect to that particular website in new tab using affialted link. On the searched page, User can see Price filter to select price bracket also sort by price and Popularity filter as well as Choose Occasion where, Office, Party, Casual, Marriage will be their. In the future More Filter can be added.
+
+8. Now how these result will load, In the Backend, We will insert a database under which will assign Skin Tone, Body Shape, Under Tones with Product Name and Category, filters with Product Image, Price, and Buy Now Affliate URL. Now Based on the searched query, If the result matches with data base table, Search will result will be shown with name Product Name, Price, Best Fit For Occasion and Buy Now Button. The result refresh as per the applied filter.
+
+For now we will recommed, FAshion out and Make up products, So on the search page, a Demo search should be their saying, I want to buy Lipstick for Nik. as if Nik is a profile. These fuction should be same as lovable prompt where user can enter anything but a guide should be there tell user what they can search. In any case if there is no result, notify user that, Sorry, we do not have any recommendations for this at the moment. We are working to bring more features and products soon!.
