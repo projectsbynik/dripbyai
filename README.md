@@ -3,6 +3,10 @@
 ## Overview
 ProjectZ is an AI-powered fashion and makeup recommendation platform that provides personalized style suggestions based on user characteristics. The application uses advanced AI algorithms to analyze user features and provide tailored recommendations for clothing and makeup products.
 
+## 🚀 Alpha Release - v0.1.0
+**Stage:** Alpha | Internal Preview  
+
+
 ## Features
 
 ### 1. User Authentication

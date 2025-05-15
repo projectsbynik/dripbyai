@@ -24,7 +24,7 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   global: {
     headers: {
       'x-application-name': 'projectz',
-      'x-application-version': '1.1.0',
+      'x-application-version': '0.1.0a',
       'x-client-info': 'projectz-web'
     }
   },
