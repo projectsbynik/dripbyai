@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-export const APP_VERSION = '0.1.0a';
+export const APP_VERSION = '0.0.1';
 
 // Security: Sanitize user input
 export function sanitizeInput(input: string): string {
