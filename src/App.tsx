@@ -13,6 +13,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const ProfileOptions = lazy(() => import('./pages/ProfileOptions'));
 const Search = lazy(() => import('./pages/Search'));
 const AdminConsole = lazy(() => import('./pages/AdminConsole'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail'));
 
 // Admin pages
 const ManageProducts = lazy(() => import('./pages/admin/ManageProducts'));
@@ -100,6 +101,11 @@ function App() {
           <Route path="/search/:profileId" element={
             <Suspense fallback={<PageLoader />}>
               <Search />
+            </Suspense>
+          } />
+          <Route path="/product/:productId" element={
+            <Suspense fallback={<PageLoader />}>
+              <ProductDetail />
             </Suspense>
           } />
           <Route path="/dashboard" element={

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { APP_VERSION, OCCASIONS } from '../lib/utils';
 import { Search as SearchIcon, Users, Heart, Sparkles, LayoutGrid, List, Sliders, ArrowLeft } from 'lucide-react';
@@ -44,53 +44,77 @@ const initialFilters: Filters = {
   sortBy: 'price_desc',
 };
 
-function ProductGrid({ products, onWishlistToggle, viewMode }: { products: Product[], onWishlistToggle: (product: Product) => void, viewMode: 'grid' | 'list' }) {
+function ProductGrid({ 
+  products, 
+  onWishlistToggle, 
+  viewMode,
+  searchQuery,
+  filters,
+  profileId 
+}: { 
+  products: Product[], 
+  onWishlistToggle: (product: Product) => void, 
+  viewMode: 'grid' | 'list',
+  searchQuery: string,
+  filters: Filters,
+  profileId: string
+}) {
+  const navigate = useNavigate();
+
+  const handleProductClick = (productId: string) => {
+    // Create a state object with the current search parameters
+    const searchState = {
+      searchQuery,
+      filters,
+      hasSearched: true,
+      profileId
+    };
+    
+    // Navigate to product detail with state
+    navigate(`/product/${productId}`, { 
+      state: searchState 
+    });
+  };
+
   return (
-    <div className={`${viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4'}`}>
+    <div className={`${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8' : 'space-y-4'}`}>
       {products.map(product => (
-        <div key={product.id} className={`bg-gray-800 rounded-2xl overflow-hidden hover:bg-gray-800/80 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/10 ${
-          viewMode === 'list' ? 'flex' : ''
-        }`}>
-          <div className={`bg-gray-900 flex items-center justify-center p-4 relative ${
-            viewMode === 'list' ? 'w-48 h-48 shrink-0' : 'aspect-square'
-          }`}>
+        <div
+          key={product.id}
+          className="bg-gray-900 rounded-3xl shadow-lg p-4 flex flex-col items-center transition-transform duration-200 hover:scale-105 hover:shadow-2xl group"
+          onClick={() => handleProductClick(product.id)}
+        >
+          <div className="relative w-full aspect-square flex items-center justify-center bg-gray-800 rounded-2xl overflow-hidden">
             <img
               src={product.image_url}
               alt={product.name}
-              className="max-w-full max-h-full object-contain"
+              className="object-contain w-full h-full transition-transform duration-300 group-hover:scale-105"
             />
             <button
-              onClick={() => onWishlistToggle(product)}
-              className={`absolute top-4 right-4 p-2 rounded-full transition-all duration-300 ${
-                product.is_wishlisted 
-                  ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' 
-                  : 'bg-gray-700/50 text-gray-300 hover:text-red-400 hover:bg-red-500/20'
-              }`}
+              onClick={e => {
+                e.stopPropagation();
+                onWishlistToggle(product);
+              }}
+              className="absolute top-3 right-3 bg-black/60 rounded-full p-2 hover:bg-pink-500/80 transition-colors"
+              title={product.is_wishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
             >
-              <Heart className="w-5 h-5" fill={product.is_wishlisted ? 'currentColor' : 'none'} />
+              <Heart
+                className={`w-6 h-6 ${product.is_wishlisted ? 'fill-pink-500 text-pink-500' : 'text-white'}`}
+                fill={product.is_wishlisted ? 'currentColor' : 'none'}
+              />
             </button>
           </div>
-          <div className={`p-6 ${viewMode === 'list' ? 'flex-1' : ''}`}>
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="text-xl font-semibold hover:text-purple-400 transition-colors">{product.name}</h3>
-              <span className="text-lg font-bold text-purple-400">
-                ₹{product.price}
-              </span>
-            </div>
-            <p className="text-gray-400 mb-4">{product.description}</p>
-            <div className="flex justify-between items-center">
-              <span className="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300">
-                {Array.isArray(product.occasion) ? product.occasion.join(', ') : product.occasion}
-              </span>
-              <a
-                href={product.source_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-opacity"
-              >
-                Buy Now
-              </a>
-            </div>
+          <div className="flex flex-col items-center w-full mt-4">
+            <span className="text-2xl font-bold text-purple-400 mb-2">₹{product.price}</span>
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                handleProductClick(product.id);
+              }}
+              className="w-full py-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold shadow-md hover:opacity-90 transition"
+            >
+              View Details
+            </button>
           </div>
         </div>
       ))}
@@ -100,6 +124,7 @@ function ProductGrid({ products, onWishlistToggle, viewMode }: { products: Produ
 
 export function Search() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { profileId } = useParams();
   const placeholderInterval = useRef<number>();
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -162,6 +187,97 @@ export function Search() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const state = location.state as { searchQuery?: string; filters?: Filters; hasSearched?: boolean; profileId?: string };
+    if (state?.hasSearched && state?.profileId) {
+      // Update the state first
+      setSearchQuery(state.searchQuery || '');
+      if (state.filters) {
+        setFilters(state.filters);
+      }
+      setHasSearched(true);
+      
+      // Then trigger the search with the preserved state
+      if (state.searchQuery) {
+        // Use a direct approach without setTimeout
+        const performSearch = async () => {
+          if (!profile) return;
+          
+          setLoading(true);
+          try {
+            // Get user's wishlist items first
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { data: wishlistData } = await supabase
+              .from('wishlists')
+              .select('product_id')
+              .eq('user_id', user.id)
+              .eq('profile_id', profile.id);
+
+            const wishlistedProductIds = new Set(wishlistData?.map(w => w.product_id));
+
+            // Now search for products
+            let productsQuery = supabase.from('products').select('*');
+            
+            // Only show active products
+            productsQuery = productsQuery.eq('is_active', true);
+            
+            // Apply active filters
+            if (state.filters?.occasion) {
+              productsQuery = productsQuery.contains('occasion', [state.filters.occasion]);
+            }
+
+            if (state.filters?.priceRange.min > 0) {
+              productsQuery = productsQuery.gte('price', state.filters.priceRange.min);
+            }
+
+            if (state.filters?.priceRange.max < 10000) {
+              productsQuery = productsQuery.lte('price', state.filters.priceRange.max);
+            }
+
+            // Search by keywords
+            const searchTerms = state.searchQuery.toLowerCase().split(' ');
+            productsQuery = productsQuery.contains('keywords', searchTerms);
+
+            if (profile.gender === 'male' && profile.body_shape_male) {
+              productsQuery = productsQuery.contains('body_shapes_male', [profile.body_shape_male]);
+            } else if (profile.gender === 'female' && profile.body_shape_female) {
+              productsQuery = productsQuery.contains('body_shapes_female', [profile.body_shape_female]);
+            }
+
+            switch (state.filters?.sortBy) {
+              case 'price_asc':
+                productsQuery = productsQuery.order('price', { ascending: true });
+                break;
+              case 'price_desc':
+                productsQuery = productsQuery.order('price', { ascending: false });
+                break;
+              case 'popularity_desc':
+                productsQuery = productsQuery.order('popularity', { ascending: false });
+                break;
+            }
+
+            const { data, error } = await productsQuery;
+
+            if (error) throw error;
+            
+            setProducts((data || []).map(product => ({
+              ...product,
+              is_wishlisted: wishlistedProductIds.has(product.id)
+            })));
+          } catch (err) {
+            console.error('Error searching products:', err);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        performSearch();
+      }
+    }
+  }, [location.state, profile]);
 
   useEffect(() => {
     async function fetchProfile() {
@@ -298,12 +414,12 @@ export function Search() {
   };
 
   const handleFilterApply = async () => {
-    await handleSearch();
+    await handleSearch(searchQuery, filters);
   };
 
   const handleFilterReset = async () => {
     setFilters(initialFilters);
-    await handleSearch();
+    await handleSearch(searchQuery, initialFilters);
   };
 
   const toggleWishlist = async (product: Product) => {
@@ -353,13 +469,13 @@ export function Search() {
     }
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (query = searchQuery, currentFilters = filters) => {
     if (!profile) return;
     
     setHasSearched(true);
     setLoading(true);
     try {
-      if (!searchQuery.trim()) {
+      if (!query.trim()) {
         setProducts([]);
         setLoading(false);
         return;
@@ -367,10 +483,12 @@ export function Search() {
 
       // Get user's wishlist items first
       const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
       const { data: wishlistData } = await supabase
         .from('wishlists')
         .select('product_id')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .eq('profile_id', profile.id);
 
       const wishlistedProductIds = new Set(wishlistData?.map(w => w.product_id));
@@ -382,20 +500,20 @@ export function Search() {
       productsQuery = productsQuery.eq('is_active', true);
       
       // Apply active filters
-      if (filters.occasion) {
-        productsQuery = productsQuery.contains('occasion', [filters.occasion]);
+      if (currentFilters.occasion) {
+        productsQuery = productsQuery.contains('occasion', [currentFilters.occasion]);
       }
 
-      if (filters.priceRange.min > 0) {
-        productsQuery = productsQuery.gte('price', filters.priceRange.min);
+      if (currentFilters.priceRange.min > 0) {
+        productsQuery = productsQuery.gte('price', currentFilters.priceRange.min);
       }
 
-      if (filters.priceRange.max < 10000) {
-        productsQuery = productsQuery.lte('price', filters.priceRange.max);
+      if (currentFilters.priceRange.max < 10000) {
+        productsQuery = productsQuery.lte('price', currentFilters.priceRange.max);
       }
 
       // Search by keywords
-      const searchTerms = searchQuery.toLowerCase().split(' ');
+      const searchTerms = query.toLowerCase().split(' ');
       productsQuery = productsQuery.contains('keywords', searchTerms);
 
       if (profile.gender === 'male' && profile.body_shape_male) {
@@ -404,7 +522,7 @@ export function Search() {
         productsQuery = productsQuery.contains('body_shapes_female', [profile.body_shape_female]);
       }
 
-      switch (filters.sortBy) {
+      switch (currentFilters.sortBy) {
         case 'price_asc':
           productsQuery = productsQuery.order('price', { ascending: true });
           break;
@@ -473,7 +591,7 @@ export function Search() {
             />
           </div>
           <button
-            onClick={handleSearch}
+            onClick={() => handleSearch()}
             className="group relative flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:opacity-90 transition-all duration-300 hover:scale-105"
           >
             <SearchIcon className="w-5 h-5 text-white transition-transform group-hover:scale-110" />
@@ -683,7 +801,14 @@ export function Search() {
               </div>
             ) : activeTab === 'wishlist' ? (
               // Display wishlist products
-              <ProductGrid products={wishlistProducts} onWishlistToggle={toggleWishlist} viewMode={viewMode} />
+              <ProductGrid 
+                products={wishlistProducts} 
+                onWishlistToggle={toggleWishlist} 
+                viewMode={viewMode}
+                searchQuery={searchQuery}
+                filters={filters}
+                profileId={profileId || ''}
+              />
             ) : hasSearched ? (
               loading ? (
               <div className="text-center py-12 animate-fade-in">
@@ -691,7 +816,14 @@ export function Search() {
                 <p className="mt-4 text-gray-400">Searching for perfect matches...</p>
               </div>
             ) : products.length > 0 ? (
-              <ProductGrid products={products} onWishlistToggle={toggleWishlist} viewMode={viewMode} />
+              <ProductGrid 
+                products={products} 
+                onWishlistToggle={toggleWishlist} 
+                viewMode={viewMode}
+                searchQuery={searchQuery}
+                filters={filters}
+                profileId={profileId || ''}
+              />
               ) : (
                 <div className="text-center py-12 bg-gray-800 rounded-2xl">
                   <p className="text-xl font-semibold mb-2">No Products Found</p>
