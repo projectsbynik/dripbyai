@@ -31,9 +31,9 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex justify-between h-16 items-center">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-r from-brand-500 to-accent-500 rounded-lg flex items-center justify-center text-white font-bold">
-              Z
+              D
             </div>
-            <span className="text-xl font-bold gradient-text hidden sm:inline-block">ProjectZ</span>
+            <span className="text-xl font-bold gradient-text hidden sm:inline-block">DripbyAI</span>
             <span className="text-xs text-dark-500 hidden sm:inline-block">v{APP_VERSION}</span>
           </Link>
           

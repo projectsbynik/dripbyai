@@ -1,9 +1,9 @@
 {
-  "name": "vite-react-typescript-starter",
-  "private": true,
-  "version": "0.0.1",
+  "name": "dripbyai",
+  "version": "0.1.0",
+  "license": "MIT",
   "type": "module",
-  "description": "AI-powered fashion and makeup recommendations",
+  "description": "Open-source AI-powered fashion and personal styling recommendation platform",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -31,9 +31,9 @@
     "@tailwindcss/forms": "^0.5.10",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "@vitejs/plugin-react": "^4.3.1",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
@@ -45,6 +45,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.1",
+    "terser": "^5.51.2",
     "typescript": "^5.3.3",
     "vite": "^5.4.2"
   },

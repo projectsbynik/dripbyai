@@ -11,9 +11,9 @@ export const Footer: React.FC = () => {
           <div className="md:col-span-5 lg:col-span-4">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 bg-gradient-to-r from-brand-500 to-accent-500 rounded-lg flex items-center justify-center text-white font-bold">
-                Z
+                D
               </div>
-              <span className="text-xl font-bold gradient-text">ProjectZ</span>
+              <span className="text-xl font-bold gradient-text">DripbyAI</span>
             </div>
             <p className="text-dark-300 mb-4 max-w-md">
               AI-powered fashion and beauty recommendations tailored to your unique features and preferences.
@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
         
         <div className="mt-12 pt-8 border-t border-dark-800 flex flex-col sm:flex-row items-center justify-between">
           <p className="text-dark-400 text-sm">
-            &copy; {new Date().getFullYear()} ProjectZ. All rights reserved.
+            &copy; {new Date().getFullYear()} DripbyAI. Open Source.
           </p>
           <p className="text-dark-500 text-xs mt-2 sm:mt-0">
             Version {APP_VERSION} | Made with ❤️ for fashion enthusiasts

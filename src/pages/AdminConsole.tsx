@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Users, ShoppingBag, FileClock, Settings, ArrowLeft } from 'lucide-react';
+import { Users, ShoppingBag, FileClock, Settings, ArrowLeft, Sparkles, Key, Check } from 'lucide-react';
 import PageTransition from '../components/layout/PageTransition';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Alert } from '../components/ui/Alert';
+import { Input } from '../components/ui/Input';
+import { getOpenRouterConfig, setOpenRouterConfig } from '../lib/ai';
 
 type StatType = {
   total_products: number;
@@ -39,6 +41,24 @@ export function AdminConsole() {
   const [userStats, setUserStats] = useState<UserStatType>(null);
   const [recentLogs, setRecentLogs] = useState<AuditLog[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // OpenRouter on-the-go configuration
+  const [openRouterKey, setOpenRouterKey] = useState('');
+  const [openRouterModel, setOpenRouterModel] = useState('meta-llama/llama-3.2-11b-vision-instruct:free');
+  const [keySaved, setKeySaved] = useState(false);
+
+  useEffect(() => {
+    const aiConfig = getOpenRouterConfig();
+    if (aiConfig.apiKey) setOpenRouterKey(aiConfig.apiKey);
+    if (aiConfig.model) setOpenRouterModel(aiConfig.model);
+  }, []);
+
+  const handleSaveOpenRouter = (e: React.FormEvent) => {
+    e.preventDefault();
+    setOpenRouterConfig(openRouterKey, openRouterModel);
+    setKeySaved(true);
+    setTimeout(() => setKeySaved(false), 3000);
+  };
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -292,6 +312,79 @@ export function AdminConsole() {
               <p className="mt-6 text-center text-dark-400 text-sm">
                 These admin features are under development and will be available soon.
               </p>
+            </CardContent>
+          </Card>
+
+          {/* OpenRouter AI Engine Configuration */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-brand-400" />
+                AI Styling Engine (OpenRouter API)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSaveOpenRouter} className="space-y-4 max-w-2xl">
+                <p className="text-dark-300 text-sm">
+                  Connect OpenRouter APIs on the go for educational or live styling analysis. When configured, image uploads are sent to your chosen vision model. If left empty, analysis defaults to built-in simulation.
+                </p>
+
+                <div>
+                  <label className="block text-sm font-medium text-dark-200 mb-1">
+                    OpenRouter API Key
+                  </label>
+                  <Input
+                    type="password"
+                    placeholder="sk-or-v1-..."
+                    value={openRouterKey}
+                    onChange={(e) => setOpenRouterKey(e.target.value)}
+                    leftIcon={<Key className="w-4 h-4" />}
+                  />
+                  <p className="text-xs text-dark-400 mt-1">
+                    Get an API key from <a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer" className="text-brand-400 underline">openrouter.ai/keys</a>. Saved locally in browser storage.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-dark-200 mb-1">
+                    Vision/Multimodal Model
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="meta-llama/llama-3.2-11b-vision-instruct:free"
+                    value={openRouterModel}
+                    onChange={(e) => setOpenRouterModel(e.target.value)}
+                  />
+                  <p className="text-xs text-dark-400 mt-1">
+                    Examples: <code className="text-brand-300">meta-llama/llama-3.2-11b-vision-instruct:free</code>, <code className="text-brand-300">google/gemini-2.0-flash-exp:free</code>, or <code className="text-brand-300">anthropic/claude-3.5-sonnet</code>.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <Button type="submit" variant="primary">
+                    {keySaved ? (
+                      <>
+                        <Check className="w-4 h-4 mr-2" />
+                        Saved!
+                      </>
+                    ) : (
+                      'Save AI Configuration'
+                    )}
+                  </Button>
+                  {openRouterKey && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => {
+                        setOpenRouterKey('');
+                        setOpenRouterConfig('');
+                      }}
+                    >
+                      Clear Key
+                    </Button>
+                  )}
+                </div>
+              </form>
             </CardContent>
           </Card>
         </main>

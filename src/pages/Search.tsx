@@ -564,7 +564,7 @@ export function Search() {
                 <span>Back</span>
               </button>
               <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">
-                ProjectZ
+                DripbyAI
               </div>
             </div>
             <div className="text-sm text-gray-500">

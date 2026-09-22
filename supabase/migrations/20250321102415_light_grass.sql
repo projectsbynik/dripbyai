@@ -13,16 +13,16 @@
 
 DO $$
 BEGIN
-  -- Set the first admin user
+  -- Attempt to set first admin user if exists
   UPDATE auth.users
   SET is_admin = true
   WHERE email = 'admin@admin.com';
 
-  -- Verify the update
+  -- Notice if user does not exist yet (admin will be configured via SQL snippet after signup)
   IF NOT EXISTS (
     SELECT 1 FROM auth.users
     WHERE email = 'admin@admin.com' AND is_admin = true
   ) THEN
-    RAISE EXCEPTION 'Failed to set admin privileges or user does not exist';
+    RAISE NOTICE 'Admin user admin@admin.com not found. Create user and run: UPDATE auth.users SET is_admin = true WHERE email = <email>;';
   END IF;
 END $$;

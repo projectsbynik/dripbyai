@@ -38,7 +38,7 @@ const Landing: React.FC = () => {
                   Ready to Transform Your Style?
                 </h2>
                 <p className="text-lg mb-8 text-dark-200">
-                  Join ProjectZ today and discover clothing and makeup that's perfectly suited to your unique features.
+                  Join DripbyAI today and discover clothing and makeup that's perfectly suited to your unique features.
                 </p>
                 
                 {user ? (

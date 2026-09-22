@@ -334,7 +334,7 @@ export function CreateProfile() {
               )}
             </div>
             <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">
-              ProjectZ
+              DripbyAI
               <span className="text-xs text-gray-600 ml-2">v{APP_VERSION}</span>
             </div>
           </div>

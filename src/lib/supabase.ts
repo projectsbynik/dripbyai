@@ -5,15 +5,17 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing required environment variables');
-  throw new Error('Supabase configuration error: Missing required environment variables');
+  console.error(
+    'Missing Supabase environment variables! Please copy .env.example to .env and set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.'
+  );
+  throw new Error('Supabase configuration error: Missing required environment variables in .env');
 }
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    storageKey: 'projectz-auth',
+    storageKey: 'dripbyai-auth',
     detectSessionInUrl: false,
     flowType: 'implicit',
     // Disable rate limiting during development
@@ -23,9 +25,9 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   },
   global: {
     headers: {
-      'x-application-name': 'projectz',
-      'x-application-version': '0.0.1',
-      'x-client-info': 'projectz-web'
+      'x-application-name': 'dripbyai',
+      'x-application-version': '0.1.0',
+      'x-client-info': 'dripbyai-web'
     }
   },
   db: {
