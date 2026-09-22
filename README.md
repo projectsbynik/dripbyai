@@ -1,6 +1,6 @@
-# 💧 DripbyAI
+# 💧 DripbyAI: Open-Source AI Fashion Stylist
 
-> **Open-Source AI-Powered Fashion & Personal Styling Recommendation Platform**
+> **AI outfit and makeup recommendations matched to your skin tone, undertone and body shape.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-18.2-61dafb.svg?logo=react&logoColor=black)](https://react.dev/)
@@ -9,7 +9,17 @@
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38b2ac.svg?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Database%20%26%20Auth-3ecf8e.svg?logo=supabase&logoColor=white)](https://supabase.com/)
 
-**DripbyAI** is an open-source personalized fashion and makeup styling platform. It analyzes user physical characteristics—including skin tones, undertones, and body silhouettes—and serves tailored clothing recommendations suited for specific occasions, price ranges, and body proportions.
+**DripbyAI** is an open-source AI personal stylist. Upload a photo (or pick your features manually) and it works out your skin tone, undertone and body shape, then recommends outfits, colors and makeup that suit you, filtered by occasion, budget and gender.
+
+It answers the everyday styling questions people actually search for: *what colors suit my skin tone*, *what to wear for my body shape*, *warm vs cool undertone*. Under the hood it uses color analysis theory, a fashion guidelines rulebook and vision-language models via OpenRouter.
+
+<!-- Add a screenshot or demo GIF here: ![DripbyAI AI stylist dashboard showing outfit recommendations](docs/screenshot.png) -->
+
+### Who it is for
+
+- **Developers** looking for a real-world React + TypeScript + Supabase reference app with auth, RLS, storage and full-text search.
+- **Builders of fashion-tech, e-commerce or recommendation systems** who want a working starting point.
+- **Anyone curious** about AI color analysis and body-shape styling.
 
 ---
 
@@ -225,7 +235,7 @@ dripbyai/
 
 ## 🗺️ Roadmap
 
-- [ ] **Multimodal AI Integration:** Connect Google Gemini Vision API to replace simulated profile analysis with real skin undertone and body shape extraction.
+- [x] **Multimodal AI Integration:** Photo-based skin tone, undertone and body shape extraction via any OpenRouter vision model (simulation fallback when no key is set).
 - [ ] **AI Stylist Chat:** Interactive conversational styling assistant for outfit curation.
 - [ ] **Expanded Region Support:** Currency localization and regional brand feeds.
 - [ ] **Virtual Wardrobe Try-On:** Generative AI preview of garments onto user profile photos.
